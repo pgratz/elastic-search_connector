@@ -59,34 +59,38 @@ def reduce():
         ts = datetime.strptime(ts.split('+')[0],'%Y-%m-%dT%H:%M:%S')
         if (docs.get(key)!=None):
             if(docs[key].get(id)!=None):
-                if (type=='DELETE' and ts >= docs[key][id][3]):
+                if (ts >= docs[key][id][2]):
                     docs[key][id] = [operation, type, ts]
             else:
                 docs[key][id] = [operation, type, ts]
         else:
             docs[key] = {}
             docs[key][id] = [operation, type, ts]
+    print(docs)
     return docs
 
 def process(docs):
     query_string = None
     for k in docs.keys():
         for v in docs[k].keys():
-            if (docs[k][v][1]=='http://publications.europa.eu/ontology/cdm#work'):
-                query_string = WORK_TEMPLATE % {'uri':v.replace('cellar:','http://publications.europa.eu/resource/cellar/')}
-            if (docs[k][v][1]=='http://publications.europa.eu/ontology/cdm#expression'):
-                query_string = EXPRESSION_TEMPLATE % {'uri':v.replace('cellar:','http://publications.europa.eu/resource/cellar/')}
-            if (docs[k][v][1]=='http://publications.europa.eu/ontology/cdm#manifestation'):
-                query_string = MANIFESTATION_TEMPLATE % {'uri':v.replace('cellar:','http://publications.europa.eu/resource/cellar/')}
-            sparql_result = sparql_query(query_string)
-            if(sparql_result!=[]):
-                docs[k][v].append(post_process[docs[k][v][1]](sparql_result))
+            if(docs[k][v][0] == "CREATE" or docs[k][v][0] == "UPDATE"):
+                if (docs[k][v][1]=='http://publications.europa.eu/ontology/cdm#work'):
+                    query_string = WORK_TEMPLATE % {'uri':v.replace('cellar:','http://publications.europa.eu/resource/cellar/')}
+                if (docs[k][v][1]=='http://publications.europa.eu/ontology/cdm#expression'):
+                    query_string = EXPRESSION_TEMPLATE % {'uri':v.replace('cellar:','http://publications.europa.eu/resource/cellar/')}
+                if (docs[k][v][1]=='http://publications.europa.eu/ontology/cdm#manifestation'):
+                    query_string = MANIFESTATION_TEMPLATE % {'uri':v.replace('cellar:','http://publications.europa.eu/resource/cellar/')}
+                sparql_result = sparql_query(query_string)
+                if(sparql_result!=[]):
+                    docs[k][v].append(post_process[docs[k][v][1]](sparql_result))
+                else:
+                    docs[k][v].append({})
             else:
-                docs[k][v].append({})
+                 docs[k][v].append({})
     for k in docs.keys():
         if(is_work_create(docs[k])):
             json_doc = create_new_document(docs[k])
-            json.dump(json_doc, sys.stdout,indent=4, sort_keys=True )
+            #json.dump(json_doc, sys.stdout,indent=4, sort_keys=True )
             put_into_index(k, json.dumps(json_doc))
 
 
@@ -172,6 +176,7 @@ def get_attachment(uri):
 
 def put_into_index(id, doc):
     resp = requests.put(url=elastic_search_endpoint+id,data=doc)
+    print(resp.text)
 
 if __name__ == '__main__':
     process(reduce())
