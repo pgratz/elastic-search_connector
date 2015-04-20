@@ -1,0 +1,21 @@
+{
+    "work": {
+        "uri":"http://publications.europa.eu/resource/cellar/9b88fb1b-9d65-11e3-aa74-01aa75ed71a1",
+        "author":"European Commission",
+        "document_date": "2014-02-21",
+        "identifiers": ["comnat:COM_2014_0096_FIN","com:COM_2014_138","celex:52014DC0096"],
+        "resource_types": ["cdm:report_ec","cdm:document_com_other_ec","cdm:work","cdm:resource_legal","cdm:act_preparatory"],
+        "subject": ["pre-accession strategy","third country"]
+    },
+    
+    "expression": {
+        "uri":"http://publications.europa.eu/resource/cellar/9b88fb1b-9d65-11e3-aa74-01aa75ed71a1.0003",
+        "title": "REPORT FROM THE COMMISSION TO THE EUROPEAN PARLIAMENT, THE COUNCIL, THE EUROPEAN ECONOMIC AND SOCIAL COMMITTEE AND THE COMMITTEE OF THE REGIONS Report on the implementation of the Global Approach to Migration and Mobility 2012-2013"
+    },
+    
+    "manifestation": {
+        "uri:"http://publications.europa.eu/resource/cellar/9b88fb1b-9d65-11e3-aa74-01aa75ed71a1.0003.04",
+        "type": "html",
+        "text": "... based 64 encoded content ..."           
+    }
+}

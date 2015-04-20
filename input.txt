@@ -1,0 +1,10 @@
+CREATE,cellar:1afbc221-9570-11e4-b8a5-01aa75ed71a1,http://publications.europa.eu/ontology/cdm#work,2015-01-12T16:37:07+01:00
+CREATE,cellar:1afbc221-9570-11e4-b8a5-01aa75ed71a1.0004,http://publications.europa.eu/ontology/cdm#expression,2015-01-12T16:37:07+01:00
+CREATE,cellar:1afbc221-9570-11e4-b8a5-01aa75ed71a1.0006,http://publications.europa.eu/ontology/cdm#expression,2015-01-12T16:37:07+01:00
+CREATE,cellar:1afbc221-9570-11e4-b8a5-01aa75ed71a1.0004.01,http://publications.europa.eu/ontology/cdm#manifestation,2015-01-12T16:37:07+01:00
+CREATE,cellar:1afbc221-9570-11e4-b8a5-01aa75ed71a1.0004.02,http://publications.europa.eu/ontology/cdm#manifestation,2015-01-12T16:37:07+01:00
+CREATE,cellar:1afbc221-9570-11e4-b8a5-01aa75ed71a1.0006.01,http://publications.europa.eu/ontology/cdm#manifestation,2015-01-12T16:37:07+01:00
+CREATE,cellar:1afbc221-9570-11e4-b8a5-01aa75ed71a1.0006.02,http://publications.europa.eu/ontology/cdm#manifestation,2015-01-12T16:37:08+01:00
+CREATE,cellar:1afbc221-9570-11e4-b8a5-01aa75ed71a1.003,http://publications.europa.eu/ontology/cdm#expression,2015-01-12T16:37:08+01:00
+DELETE,cellar:1afbc221-9570-11e4-b8a5-01aa75ed71a1.0004.01,http://publications.europa.eu/ontology/cdm#manifestation,2015-01-12T16:38:56+01:00
+UPDATE,cellar:1afbc221-9570-11e4-b8a5-01aa75ed71a1.0004.02,http://publications.europa.eu/ontology/cdm#manifestation,2015-01-12T16:39:56+01:00

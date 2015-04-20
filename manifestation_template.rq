@@ -1,0 +1,7 @@
+prefix cdm: <http://publications.europa.eu/ontology/cdm#> 
+select distinct ?uri ?type ?lang
+where {
+?uri owl:sameAs/cdm:manifestation_type ?type;
+owl:sameAs/cdm:manifestation_manifests_expression/^owl:sameAs/owl:sameAs/cdm:expression_uses_language/dc:identifier ?lang.
+filter (?uri=<http://publications.europa.eu/resource/cellar/8f3f9819-5687-11e3-a8cb-01aa75ed71a1.0001.01>)
+}

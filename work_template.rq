@@ -1,0 +1,21 @@
+prefix cdm: <http://publications.europa.eu/ontology/cdm#> 
+
+select distinct ?uri ?author ?document_date 
+(group_concat(distinct ?identifier;separator=", ") as ?identifiers) 
+(group_concat(distinct ?resource_type;separator=", ") as ?resource_types)  
+(group_concat(distinct ?subject;separator=", ") as ?subjects)  
+where { 
+
+?uri owl:sameAs/cdm:work_created_by_agent/skos:prefLabel ?author;
+owl:sameAs/cdm:work_date_document ?document_date;
+owl:sameAs/cdm:work_id_document ?identifier;
+owl:sameAs/rdf:type ?resource_type;
+owl:sameAs/cdm:work_is_about_concept_eurovoc/skos:prefLabel ?subject.
+
+
+filter (lang(?author)="en")
+filter (lang(?subject)="en")
+filter (?uri=<http://publications.europa.eu/resource/cellar/9b88fb1b-9d65-11e3-aa74-01aa75ed71a1>)
+}
+
+group by ?uri ?author ?document_date
