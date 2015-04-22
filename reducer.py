@@ -84,14 +84,15 @@ def process(docs):
                 if(sparql_result!=[]):
                     docs[k][v].append(post_process[docs[k][v][1]](sparql_result))
                 else:
+                    print(v+" is empty")
                     docs[k][v].append({})
             else:
                  docs[k][v].append({})
     for k in docs.keys():
         if(is_work_create(docs[k])):
-            json_doc = create_new_document(docs[k])
+            json_doc = add_attachment(create_new_document(docs[k]))
             json.dump(json_doc, sys.stdout,indent=4, sort_keys=True )
-            put_into_index(k, json.dumps(json_doc))
+           # put_into_index(k, json.dumps(json_doc))
 
 
 def post_process_work_result(result):
@@ -114,8 +115,8 @@ def post_process_manifestation_result(result):
     lang = result[0]['lang']['value']
     uri = result[0]['uri']['value']
     type = result[0]['type']['value']
-    text = get_attachment(uri)
-    return {'uri':uri,'type':type, 'text'+'_'+str(lang).lower():text}
+    text = ""
+    return {'uri':uri,'type':type, 'text'+'_'+str(lang).lower():text, 'lang':lang}
 
 def is_work_create(doc):
     for k in doc.keys():
@@ -139,7 +140,7 @@ def create_new_document(doc):
             else:
                 jsonDocument['expressions'] = [doc[k][3]]
         if(doc[k][1]=='http://publications.europa.eu/ontology/cdm#manifestation' and doc[k][3]!={}):
-            attachment_key = sorted(list(doc[k][3].keys()))[0]
+            attachment_key = sorted(list(doc[k][3].keys()))[1]
             attachment_format = doc[k][3]['type']
             if(jsonDocument.get('manifestations')!=None):
                 if(attachment_key in registered_format.keys()):
@@ -168,6 +169,17 @@ def sparql_query(query, format="application/json"):
         json_results = json.loads(str(resp.text))
         return json_results['results']['bindings']
     return resp.text
+
+def add_attachment(jsonDocument):
+    manifestations = []
+    if ('manifestations' in jsonDocument.keys()):
+        for m in jsonDocument['manifestations']:
+            attachment = get_attachment(m['uri'])
+            m['text_'+m['lang'].lower()]= attachment
+            manifestation = {'uri':m['uri'], 'type':m['type'], 'text_'+m['lang'].lower():attachment}
+            manifestations.append(manifestation)
+        jsonDocument['manifestations'] = manifestations
+    return jsonDocument
 
 def get_attachment(uri):
     headers = {"Accept":"text/html,application/xhtml+xml,application/pdf;type=pdfa1a"}
