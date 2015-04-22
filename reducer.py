@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-from operator import itemgetter
 import sys
 import requests
 import json
@@ -43,8 +42,8 @@ docs = {}
 current_count = 0
 word = None
 sparql_endpoint = 'http://publications.europa.eu/webapi/rdf/sparql'
-elastic_search_endpoint = 'http://localhost:9200/cellar/object/'
-index_prefs = {'xhtml':0,'html':1,'pdfa1a':2,'fmx4':3}
+elastic_search_endpoint = 'http://opsvc086:9200//cellar/object/'
+index_prefs = {'xhtml':0,'html':1,'pdfa1a':2,'pdf':3,'fmx4':4}
 
 
 def reduce():
@@ -66,7 +65,7 @@ def reduce():
         else:
             docs[key] = {}
             docs[key][id] = [operation, type, ts]
-    print(docs)
+    #print(docs)
     return docs
 
 def process(docs):
@@ -91,8 +90,8 @@ def process(docs):
     for k in docs.keys():
         if(is_work_create(docs[k])):
             json_doc = add_attachment(create_new_document(docs[k]))
-            json.dump(json_doc, sys.stdout,indent=4, sort_keys=True )
-           # put_into_index(k, json.dumps(json_doc))
+            #json.dump(json_doc, sys.stdout,indent=4, sort_keys=True )
+            put_into_index(k, json.dumps(json_doc))
 
 
 def post_process_work_result(result):
