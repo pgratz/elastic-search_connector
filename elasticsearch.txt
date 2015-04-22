@@ -1,0 +1,57 @@
+DELETE /cellar
+
+PUT /cellar
+
+DELETE /cellar/object/_mapping
+
+PUT /cellar/object/_mapping
+{
+  "object": {
+    "properties": {
+      "manifestations":{ "type":"nested",
+      "properties":{
+      "text_bul":{ "type": "attachment","path":"full","analyzer":"bulgarian"  },
+      "text_ces":{ "type": "attachment","path":"full","analyzer":"czech"  },
+      "text_dan":{ "type": "attachment", "path":"full", "analyzer":"danish"},
+      "text_deu":{ "type": "attachment", "path":"full","analyzer":"german"},
+      "text_ell":{ "type": "attachment", "path":"full","analyzer":"greek"},
+      "text_eng":{ "type": "attachment", "path":"full","analyzer":"english"},
+      "text_est":{ "type": "attachment","path":"full"  },
+      "text_fin":{ "type": "attachment","path":"full","analyzer":"finnish"  },
+      "text_fra":{ "type": "attachment","path":"full","analyzer":"french"  },
+      "text_gle":{ "type": "attachment","path":"full","analyzer":"galician"  },
+      "text_hrv":{ "type": "attachment","path":"full","analyzer":"default"  },
+      "text_hun":{ "type": "attachment","path":"full","analyzer":"hungarian"  },
+      "text_isl":{ "type": "attachment","path":"full" },
+      "text_ita":{ "type": "attachment","path":"full","analyzer":"italian"  },
+      "text_lav":{ "type": "attachment","path":"full" },
+      "text_lit":{ "type": "attachment","path":"full" },
+      "text_mlt":{ "type": "attachment","path":"full"  },
+      "text_nld":{ "type": "attachment","path":"full","analyzer":"dutch"  },
+      "text_nor":{ "type": "attachment","path":"full","analyzer":"norwegian"  },
+      "text_pol":{ "type": "attachment","path":"full"  },
+      "text_por":{ "type": "attachment","path":"full","analyzer":"portuguese"  },
+      "text_ron":{ "type": "attachment","path":"full","analyzer":"romanian"  },
+      "text_slk":{ "type": "attachment","path":"full"  },
+      "text_slv":{ "type": "attachment","path":"full","analyzer":"english"  },
+      "text_spa":{ "type": "attachment","path":"full","analyzer":"spanish"  },
+      "text_swe":{ "type": "attachment","path":"full","analyzer":"swedish"  }
+      }}
+    }
+  }
+}
+
+
+GET /cellar/object/_search
+{
+  "query":{
+  "nested":{
+    "path":"manifestations",
+  "query": {
+    "match": {
+      "manifestations.text_deu": "Verordnung"
+    }
+  }
+  } 
+  }
+}
