@@ -43,7 +43,7 @@ docs = {}
 current_count = 0
 word = None
 sparql_endpoint = 'http://publications.europa.eu/webapi/rdf/sparql'
-elastic_search_endpoint = 'http://opsvc086:9200/cellar_test/object/'
+elastic_search_endpoint = 'http://localhost:9200/cellar/object/'
 index_prefs = {'xhtml':0,'html':1,'pdfa1a':2,'fmx4':3}
 
 
@@ -90,7 +90,7 @@ def process(docs):
     for k in docs.keys():
         if(is_work_create(docs[k])):
             json_doc = create_new_document(docs[k])
-            #json.dump(json_doc, sys.stdout,indent=4, sort_keys=True )
+            json.dump(json_doc, sys.stdout,indent=4, sort_keys=True )
             put_into_index(k, json.dumps(json_doc))
 
 
@@ -170,8 +170,9 @@ def sparql_query(query, format="application/json"):
     return resp.text
 
 def get_attachment(uri):
-    resp = requests.get(uri)
-    return base64.b64encode(resp.text.encode('ascii')).decode()
+    headers = {"Accept":"text/html,application/xhtml+xml,application/pdf;type=pdfa1a"}
+    resp = requests.get(uri, headers=headers)
+    return base64.b64encode(resp.text.encode('utf-8')).decode()
 
 
 def put_into_index(id, doc):
