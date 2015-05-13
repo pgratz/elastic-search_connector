@@ -49,15 +49,18 @@ index_prefs = {'xhtml':0,'html':1,'pdfa1a':2,'pdf':3,'fmx4':4}
 def reduce():
     # input comes from STDIN
     for line in sys.stdin:
-        entry = {}
         # remove leading and trailing whitespace
         line = line.strip()
         # parse the input we got from mapper.py
         key, value = line.split('\t', 1)
         operation, id, type, ts = value.split(',')
         ts = datetime.strptime(ts.split('+')[0],'%Y-%m-%dT%H:%M:%S')
+        # Hadoop sorts map output by key before passing it to the reducer
+        # key (=cellar work id) already exists
         if (docs.get(key)!=None):
+            # resource uri (work, expr, manif) already exists
             if(docs[key].get(id)!=None):
+                # replace old entry
                 if (ts >= docs[key][id][2]):
                     docs[key][id] = [operation, type, ts]
             else:
@@ -70,7 +73,9 @@ def reduce():
 
 def process(docs):
     query_string = None
+    # for each work
     for k in docs.keys():
+        # retrieve all relevant metadata
         for v in docs[k].keys():
             if(docs[k][v][0] == "CREATE" or docs[k][v][0] == "UPDATE"):
                 if (docs[k][v][1]=='http://publications.europa.eu/ontology/cdm#work'):
