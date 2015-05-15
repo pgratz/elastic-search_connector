@@ -41,8 +41,8 @@ MANIFESTATION_TEMPLATE = ('prefix cdm: <http://publications.europa.eu/ontology/c
 docs = {}
 current_count = 0
 word = None
-sparql_endpoint = 'http://publications.europa.eu/webapi/rdf/sparql'
-elastic_search_endpoint = 'http://opsvc086:9200//cellar/object/'
+sparql_endpoint = 'http://opsvc094:8890/sparql'
+elastic_search_endpoint = 'http://opsvc086:9200/cellar/object/'
 index_prefs = {'xhtml':0,'html':1,'pdfa1a':2,'pdf':3,'fmx4':4}
 
 
@@ -187,7 +187,11 @@ def add_attachment(jsonDocument):
 
 def get_attachment(uri):
     headers = {"Accept":"text/html,application/xhtml+xml,application/pdf;type=pdfa1a"}
-    resp = requests.get(uri, headers=headers)
+    # because bigdata machines cannot resolve publications.europa.eu, 
+    # we have to intercept and modify the redirect. 
+    resp = requests.get(uri.replace('publications.europa.eu', 'opsrv752:8180'), headers=headers, allow_redirects=False)
+    redirect_uri = resp.headers['location']
+    resp = requests.get(redirect_uri.replace('publications.europa.eu', 'opsrv752:8180'), headers=headers, allow_redirects=False)
     return base64.b64encode(resp.text.encode('utf-8')).decode()
 
 
